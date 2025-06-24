@@ -1,0 +1,18 @@
+<div class="main-com">
+  <div class="apx-chart">
+    <apx-chart [series]="chartSeries" [chart]="chartOptions" [xaxis]="xAxis" [yaxis]="yAxis" [plotOptions]="plotOptions"
+      [dataLabels]="dataLabels" [colors]="chartColors" [legend]="chartLegend"></apx-chart>
+  </div>
+  <div class="high-charts">
+    <apx-chart [series]="usageChartSeries" [chart]="usageChartOptions" [labels]="usageChartLabels"
+      [plotOptions]="usagePlotOptions" [fill]="usageFill" ></apx-chart>
+    <div class="content">
+      <strong>You've almost reached your limit</strong>
+      <p class="para">
+        You have used 80% of your available spots.<br />
+        Upgrade plan to monitor more vendors.
+      </p>
+    </div>
+    
+  </div>
+</div>

@@ -1,0 +1,28 @@
+.main-com {
+  display: flex;
+  flex-direction: row
+}
+
+.apx-chart {
+  flex: 1 1 70%;
+}
+
+apx-chart {
+  display:block;
+  margin: none;
+  width: 100%
+}
+
+.high-charts {
+  flex: 1 1 30%;
+}
+
+.content {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.para {
+  font-size: 12px;
+  color: black
+}
