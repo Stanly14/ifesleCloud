@@ -13,6 +13,37 @@
         Upgrade plan to monitor more vendors.
       </p>
     </div>
-    
   </div>
+</div>
+<div class="table-contain">
+  <table cellpadding="8" cellspacing="20">
+    <thead>
+      <tr>
+        @for (column of columns; track column) {
+        <th>{{ column?.column_name}}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of tableData; track row.id) {
+      <tr>
+        @for (column of columns; track column) {
+        <td>
+          @if(column?.column_key == 'name') {
+               {{row.name?.first_name}} {{row.name?.last_name}}
+          }
+          @else if(column?.column_key == 'teams') {
+            @for(team of row[column?.column_key]; track team) {
+              {{ team.value}}
+            }
+          }
+          @else {
+            {{ row[column?.column_key] }}
+          }
+          </td>
+        }
+      </tr>
+      }
+    </tbody>
+    </table>
 </div>

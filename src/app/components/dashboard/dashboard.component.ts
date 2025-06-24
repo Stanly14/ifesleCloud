@@ -10,6 +10,7 @@ import {
   NgApexchartsModule
 } from "ng-apexcharts";
 import { DataService } from '../../services/data.service';
+import { HighlightDirective } from './../../directives/highlight.directive';
 import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
