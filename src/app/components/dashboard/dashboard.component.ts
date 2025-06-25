@@ -12,10 +12,11 @@ import {
 import { DataService } from '../../services/data.service';
 import { HighlightDirective } from './../../directives/highlight.directive';
 import { Subscription } from 'rxjs';
+import { ProgressBarDirective } from '../../directives/progress-bar.directive';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgApexchartsModule],
+  imports: [NgApexchartsModule, HighlightDirective, ProgressBarDirective],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -155,8 +156,13 @@ export class DashboardComponent {
       if (res.grid_data) {
         this.tableData = res.grid_data
       }
-      console.log("column", this.columns);
-      console.log("data", this.tableData);
     }))
+    console.log("hh", this.tableData)
+  }
+  editRow(event: any) {
+
+  }
+  deleteRow(event: any) {
+
   }
 }

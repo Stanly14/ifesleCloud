@@ -16,12 +16,13 @@
   </div>
 </div>
 <div class="table-contain">
-  <table cellpadding="8" cellspacing="20">
+  <table cellpadding="20" cellspacing="10">
     <thead>
       <tr>
         @for (column of columns; track column) {
         <th>{{ column?.column_name}}</th>
         }
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -32,9 +33,18 @@
           @if(column?.column_key == 'name') {
                {{row.name?.first_name}} {{row.name?.last_name}}
           }
+          @else if(column?.column_key == 'license_used') {
+            <span>
+              <div class="progress-container">
+                <div class="progress-bar" [appProgressBar]="row[column?.column_key]"></div></div>
+            </span>
+          }
+          @else if(column?.column_key == 'status') {
+            <span class="position-card" [appHighlight]="row[column?.column_key]">{{ row[column?.column_key] }}</span>
+          }
           @else if(column?.column_key == 'teams') {
             @for(team of row[column?.column_key]; track team) {
-              {{ team.value}}
+              <span class="position-card" [appHighlight]="team">{{ team.value}} </span> 
             }
           }
           @else {
@@ -42,6 +52,12 @@
           }
           </td>
         }
+        <td>
+          <i class="material-icons" (click)="editRow(row)">
+            edit</i>
+          &nbsp;
+          <i class="material-icons" (click)="deleteRow(row)">delete</i>
+        </td>
       </tr>
       }
     </tbody>

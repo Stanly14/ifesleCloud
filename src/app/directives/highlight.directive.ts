@@ -5,17 +5,22 @@ import { Directive, ElementRef, Input } from '@angular/core';
   standalone: true
 })
 export class HighlightDirective {
-  @Input('appHighlight') columnName!: string;
-
+  @Input('appHighlight') rowData!: any;
   constructor(private el: ElementRef) { }
   ngOnInit(): void {
-    if (this.columnName === 'name') {
-      this.el.nativeElement.style.fontWeight = 'bold';
-      this.el.nativeElement.style.color = 'purple';
+    if (this.rowData?.text_color && this.rowData.background_color) {
+      this.el.nativeElement.style.color = this.rowData.text_color;
+      this.el.nativeElement.style.backgroundColor = this.rowData.background_color;
     }
-
-    if (this.columnName === 'department') {
-      this.el.nativeElement.style.backgroundColor = '#f0f0f0';
+    else {
+      if (this.rowData == 'Customer') {
+        this.el.nativeElement.style.color = '#2C76DB';
+        this.el.nativeElement.style.backgroundColor = '#F1F8FE';
+      }
+      else if (this.rowData == 'Churned') {
+        this.el.nativeElement.style.color = '#494DCB';
+        this.el.nativeElement.style.backgroundColor = '#EFF4FE';
+      }
     }
   }
 }

@@ -1,0 +1,55 @@
+
+.compact-sidebar {
+  width: 60px;
+  height: 90vh;
+  background-color: #f9f9fc;
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  position: fixed;
+}
+
+/* Icon Stack */
+.sidebar-top,
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Individual Icon */
+.sidebar-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #777;
+  transition: all 0.2s ease;
+}
+
+.sidebar-icon:hover,
+.sidebar-icon.active {
+  color: #000;
+  scale: 1.1;
+}
+
+/* Avatar */
+.sidebar-avatar img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+.outer{
+  width: 100%;
+}
+.dash{
+  width: calc(100% - 60px);
+  margin-left: 60px;
+}
+.paginator {
+  width: calc(100% - 60px);
+    margin-left: 60px;
+}

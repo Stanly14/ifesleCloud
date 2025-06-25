@@ -1,0 +1,23 @@
+<div class="outer">
+  <div class="compact-sidebar">
+    <div class="sidebar-top">
+      <i class="material-icons">public</i>
+      <i class="material-icons">cottage</i>
+      <i class="material-icons">description</i>
+      <i class="material-icons">folder_open</i>
+      <i class="material-icons">group</i>
+    </div>
+    <div class="sidebar-bottom">
+      <i class="material-icons">settings</i>
+      <div class="sidebar-avatar">
+        <img src="https://i.pravatar.cc/40" alt="avatar" />
+      </div>
+    </div>
+  </div>
+  <div class="dash">
+    <app-dashboard></app-dashboard>
+  </div>
+  <div class="paginator">
+    <app-pagination [currentPage]="currentPage" [limit]="20" [total]="100" (changePage)="changePage($event)"></app-pagination>
+  </div>
+</div>
