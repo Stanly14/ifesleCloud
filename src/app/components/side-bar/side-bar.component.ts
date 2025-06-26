@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { DashboardComponent } from "../dashboard/dashboard.component";
-import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-side-bar',
   standalone: true,
-  imports: [DashboardComponent, PaginationComponent],
+  imports: [DashboardComponent],
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.scss'
 })

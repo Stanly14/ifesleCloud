@@ -1,65 +1,84 @@
-<div class="main-com">
-  <div class="apx-chart">
-    <apx-chart [series]="chartSeries" [chart]="chartOptions" [xaxis]="xAxis" [yaxis]="yAxis" [plotOptions]="plotOptions"
-      [dataLabels]="dataLabels" [colors]="chartColors" [legend]="chartLegend"></apx-chart>
-  </div>
-  <div class="high-charts">
-    <apx-chart [series]="usageChartSeries" [chart]="usageChartOptions" [labels]="usageChartLabels"
-      [plotOptions]="usagePlotOptions" [fill]="usageFill" ></apx-chart>
-    <div class="content">
-      <strong>You've almost reached your limit</strong>
-      <p class="para">
-        You have used 80% of your available spots.<br />
-        Upgrade plan to monitor more vendors.
-      </p>
+@if(isLoading) {
+  <div class="overlay-spinner">
+    <div class="custom-spinner"></div>
+    </div>
+}
+@else {
+  <div class="main-com">
+    @if(chartConfig && chartConfig.usageChartOptions &&chartConfig && chartConfig.chartOptions){<div class="apx-chart">
+      <apx-chart [series]="chartConfig.chartSeries" [chart]="chartOptions" [xaxis]="chartConfig.xAxis" [yaxis]="chartConfig.yAxis" [plotOptions]="chartConfig.plotOptions"
+        [dataLabels]="chartConfig.dataLabels" [colors]="chartConfig.chartColors" [legend]="chartConfig.chartLegend"></apx-chart>
+    </div>}
+    <div class="high-charts">
+      <apx-chart [series]="chartConfig.usageChartSeries" [chart]="usageChartOptions"
+        [plotOptions]="chartConfig.usagePlotOptions" [fill]="chartConfig.usageFill"></apx-chart>
+      <div class="content">
+        <strong>You've almost reached your limit</strong>
+        <p class="para">
+          You have used 80% of your available spots.<br />
+          Upgrade plan to monitor more vendors.
+        </p>
+      </div>
     </div>
   </div>
-</div>
-<div class="table-contain">
-  <table cellpadding="20" cellspacing="10">
-    <thead>
-      <tr>
-        @for (column of columns; track column) {
-        <th>{{ column?.column_name}}</th>
-        }
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @for (row of tableData; track row.id) {
-      <tr>
-        @for (column of columns; track column) {
-        <td>
-          @if(column?.column_key == 'name') {
-               {{row.name?.first_name}} {{row.name?.last_name}}
+  <div class="table-contain">
+    <table cellpadding="20" cellspacing="10">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" (change)="toggleAll($event)" />
+          </th>
+          @for (column of columns; track column) {
+          <th>{{ column?.column_name}}</th>
           }
-          @else if(column?.column_key == 'license_used') {
-            <span>
-              <div class="progress-container">
-                <div class="progress-bar" [appProgressBar]="row[column?.column_key]"></div></div>
-            </span>
-          }
-          @else if(column?.column_key == 'status') {
-            <span class="position-card" [appHighlight]="row[column?.column_key]">{{ row[column?.column_key] }}</span>
-          }
-          @else if(column?.column_key == 'teams') {
-            @for(team of row[column?.column_key]; track team) {
-              <span class="position-card" [appHighlight]="team">{{ team.value}} </span> 
-            }
-          }
-          @else {
-            {{ row[column?.column_key] }}
-          }
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of tableData; track row.id) {
+        <tr>
+          <td>
+            <input type="checkbox" [(ngModel)]="row.selected" />
           </td>
+          @for (column of columns; track column) {
+          <td>
+            @if(column?.column_key == 'name') {
+            {{row.name.first_name}} {{row.name.last_name}}
+            }
+            @else if(column?.column_key == 'license_used') {
+            <span class="progress">
+              <div class="progress-container">
+                <div class="progress-bar" [appProgressBar]="row.license_used"></div>
+              </div>
+              <div class="progress-percent">{{row.license_used}}%</div>
+            </span>
+            }
+            @else if(column?.column_key == 'status') {
+            <span class="position-card" [appHighlight]="row.status">{{ row.status }}</span>
+            }
+            @else if(column?.column_key == 'teams') {
+            @for(team of row.teams; track team) {
+            <span class="position-card" [appHighlight]="team">{{ team.value}} </span>
+            }
+            }
+            @else {
+            {{ row.role }}
+            }
+          </td>
+          }
+          <td>
+            <i class="material-icons icon-edit" (click)="editRow(row)">
+              edit</i>
+            &nbsp;
+            <i class="material-icons icon-delete" (click)="deleteRow(row)">delete</i>
+          </td>
+        </tr>
         }
-        <td>
-          <i class="material-icons" (click)="editRow(row)">
-            edit</i>
-          &nbsp;
-          <i class="material-icons" (click)="deleteRow(row)">delete</i>
-        </td>
-      </tr>
-      }
-    </tbody>
+      </tbody>
     </table>
-</div>
+  </div>
+  <div class="paginator">
+    <app-pagination [currentPage]="currentPage" [limit]="20" [total]="100"
+      (changePage)="changePage($event)"></app-pagination>
+    </div>
+}

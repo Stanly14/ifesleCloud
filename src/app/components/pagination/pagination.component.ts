@@ -13,9 +13,7 @@ export class PaginationComponent {
   @Input() total: number = 0;
   @Input() limit: number = 20;
   @Output() changePage = new EventEmitter<number>();
-
   pages: number[] = [];
-
   ngOnInit(): void {
     const pagesCount = Math.ceil(this.total / this.limit);
     this.pages = this.range(1, pagesCount);

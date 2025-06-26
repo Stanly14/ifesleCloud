@@ -1,45 +1,25 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import {
-  ApexAxisChartSeries,
   ApexChart,
-  ApexXAxis,
-  ApexYAxis,
-  ApexPlotOptions,
-  ApexDataLabels,
-  ApexLegend,
   NgApexchartsModule
 } from "ng-apexcharts";
 import { DataService } from '../../services/data.service';
 import { HighlightDirective } from './../../directives/highlight.directive';
 import { Subscription } from 'rxjs';
 import { ProgressBarDirective } from '../../directives/progress-bar.directive';
+import { PaginationComponent } from '../pagination/pagination.component';
+import { FormsModule } from '@angular/forms';
+import { CHART } from '../../constants/chart';
+import { Columns, User } from '../../models/dashboard';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [NgApexchartsModule, HighlightDirective, ProgressBarDirective],
+  imports: [NgApexchartsModule, HighlightDirective, ProgressBarDirective, PaginationComponent, FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
-  chartSeries: ApexAxisChartSeries = [
-    {
-      name: "Year 2023",
-      data: [44, 55, 41, 67, 22, 43,55,63,20,30,24,33]
-    },
-    {
-      name: "Year 2024",
-      data: [48, 50, 40, 65, 25, 40,70,80,40,38,22,50]
-    },
-    {
-      name: "Year 2025",
-      data: [20, 40, 25, 10, 12, 28,60,40,33,47,50,34]
-    },
-    {
-      name: "Year 2026",
-      data: [13, 36, 20, 8, 13, 27,33,40,38,43,50,60]
-    }
-  ];
-
+  chartConfig = CHART
   chartOptions: ApexChart = {
     type: "bar",
     height: 350,
@@ -47,52 +27,6 @@ export class DashboardComponent {
     toolbar: { show: false },
     zoom: { enabled: false }
   };
-
-  xAxis: ApexXAxis = {
-    categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ],
-    title: { text: "Month" },
-    labels: { style: { colors: '#ccc' } }
-  };
-
-  yAxis: ApexYAxis = {
-    title: { text: "Security Rating" },
-    labels: { formatter: (val) => val+'' , style: { colors: '#ccc' } }
-  };
-
-  plotOptions: ApexPlotOptions = {
-    bar: {
-      horizontal: false,
-      borderRadius: 5
-    }
-  };
-
-  dataLabels: ApexDataLabels = {
-    enabled: true,
-    formatter: (val) => `${val}`
-  };
-
-  chartColors = ["#66C2A5", "#1E90FF", "#20C997", "#A0D468"];
-
-  chartLegend: ApexLegend = {
-    position: "top",
-    horizontalAlign: "left",
-    labels: { colors: '#ccc' }
-  };
-
-  usageChartSeries: ApexNonAxisChartSeries = [80];
 
   usageChartOptions: ApexChart = {
     type: 'radialBar',
@@ -102,67 +36,49 @@ export class DashboardComponent {
     }
   };
 
-  usageChartLabels = [''];
-
-  usagePlotOptions: ApexPlotOptions = {
-    radialBar: {
-      startAngle: -90,
-      endAngle: 90,
-      track: {
-        background: '#e7e7e7',
-        strokeWidth: '100%'
-      },
-      hollow: {
-        margin: 0,
-        size: '70%',
-      },
-      dataLabels: {
-        name: {
-          show: false
-        },
-        value: {
-          offsetY: -10,
-          fontSize: '34px',
-          color: '#333',
-          formatter: () => '240'
-        }
-      }
-    }
-  };
-
-  usageFill: ApexFill = {
-    type: 'gradient',
-    gradient: {
-      shade: 'light',
-      type: 'horizontal',
-      gradientToColors: ['#8e44ad'],
-      stops: [0, 100]
-    }
-  };
-
-  usageStroke: ApexStroke = {
-    lineCap: 'round'
-  };
   subscriptionObj: Subscription = new Subscription();
+  isLoading: boolean = true;
   private serviceData = inject(DataService);
-  dataList:any;
-  columns: any;
-  tableData: any 
-  ngOnInit(){
+  @Output() change = new EventEmitter<number>();
+  buttonIndexes: number[] = Array.from({ length: 10 }, (_, i) => i + 1);
+  currentPage: number = 1;
+  dataList: any[] = [];
+  columns: Columns[] = [];
+  tableData: User[] = [];
+  ngOnInit(): void{
     this.subscriptionObj.add(this.serviceData.getData().subscribe((res: any) => {
       if (res.grid_columns) {
         this.columns = res.grid_columns;
       }
       if (res.grid_data) {
-        this.tableData = res.grid_data
+        this.dataList = res.grid_data
       }
+      setTimeout(()=> {
+        this.isLoading=false
+      },2000)
     }))
-    console.log("hh", this.tableData)
+    console.log("row data", this.tableData)
+    if(this.dataList.length) {
+      for (let i = 0; i < 10; i++) {
+        this.tableData.push(this.dataList[i])
+      }
+    }
   }
-  editRow(event: any) {
+  editRow(event: any): void {
 
   }
-  deleteRow(event: any) {
+  deleteRow(event: any): void {
 
+  }
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.tableData = [];
+    for (let i = this.currentPage * 10; i < (this.currentPage * 10)+10; i++) {
+      this.tableData.push(this.dataList[i])
+    }
+  }
+  toggleAll(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.tableData.forEach(item => item.selected = isChecked);
   }
 }
