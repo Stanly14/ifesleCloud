@@ -10,8 +10,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class PaginationComponent {
   @Input() currentPage: number = 1;
-  @Input() total: number = 0;
-  @Input() limit: number = 20;
+  @Input() total!: number;
+  @Input() limit!: number;
   @Output() changePage = new EventEmitter<number>();
   pages: number[] = [];
   ngOnInit(): void {

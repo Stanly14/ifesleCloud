@@ -11,6 +11,7 @@ import { PaginationComponent } from '../pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
 import { CHART } from '../../constants/chart';
 import { Columns, User } from '../../models/dashboard';
+import { ConfirmationServiceService } from '../../services/confirmation-service.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -19,6 +20,7 @@ import { Columns, User } from '../../models/dashboard';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  constructor(private confirmation: ConfirmationServiceService) { }
   chartConfig = CHART
   chartOptions: ApexChart = {
     type: "bar",
@@ -35,7 +37,6 @@ export class DashboardComponent {
       enabled: true
     }
   };
-
   subscriptionObj: Subscription = new Subscription();
   isLoading: boolean = true;
   private serviceData = inject(DataService);
@@ -57,18 +58,17 @@ export class DashboardComponent {
         this.isLoading=false
       },2000)
     }))
-    console.log("row data", this.tableData)
     if(this.dataList.length) {
       for (let i = 0; i < 10; i++) {
         this.tableData.push(this.dataList[i])
       }
     }
   }
-  editRow(event: any): void {
-
-  }
   deleteRow(event: any): void {
-
+    const confirmed = this.confirmation.open(
+      'Confirm Deletion',
+      'Are you sure you want to delete this item?'
+    );
   }
   changePage(page: number): void {
     this.currentPage = page;
